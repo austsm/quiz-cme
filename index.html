@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz CME - Enfermagem</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #006699;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    section {
+      background-color: white;
+      margin: 10px 20px;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .question {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+
+    .options button {
+      display: block;
+      margin: 8px 0;
+      padding: 12px;
+      width: 100%;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      background-color: #e2e8f0;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .options button:hover {
+      background-color: #cbd5e1;
+    }
+
+    .options button.correct {
+      background-color: #c8e6c9;
+      color: green;
+    }
+
+    .options button.incorrect {
+      background-color: #ffcdd2;
+      color: red;
+    }
+
+    .feedback {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    #pontuacao-final {
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      padding: 20px;
+    }
+
+    #reiniciar {
+      display: none;
+      margin: 0 auto 30px;
+      padding: 12px 24px;
+      background-color: #006699;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    footer {
+      background-color: #006699;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.5em;
+      }
+
+      .options button {
+        font-size: 1em;
+        padding: 10px;
+      }
+
+      section {
+        margin: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Quiz CME - Enfermagem</h1>
+    <p>Aprenda interativamente</p>
+  </header>
+
+  <div id="quiz-container"></div>
+
+  <div id="pontuacao-final"></div>
+  <button id="reiniciar" onclick="location.reload()">🔄 Reiniciar Quiz</button>
+
+  <footer>
+    <p>Curso de Enfermagem - CME</p>
+    <p>© 2025 - Todos os direitos reservados</p>
+  </footer>
+
+  <script>
+    const questoes = [
+      {
+        pergunta: "Qual a principal finalidade da CME?",
+        opcoes: [
+          { texto: "Realizar cirurgias", correta: false, explicacao: "Essa é função do centro cirúrgico." },
+          { texto: "Processar e esterilizar materiais", correta: true },
+          { texto: "Administrar medicamentos", correta: false, explicacao: "É uma função assistencial, não da CME." }
+        ]
+      },
+      {
+        pergunta: "Qual é a norma da Anvisa que regula o funcionamento da CME?",
+        opcoes: [
+          { texto: "RDC nº 10/2015", correta: false, explicacao: "Trata de outro tema." },
+          { texto: "RDC nº 15/2012", correta: true },
+          { texto: "RDC nº 44/2009", correta: false, explicacao: "Referente a farmácias." }
+        ]
+      },
+      {
+        pergunta: "O que é uma autoclave?",
+        opcoes: [
+          { texto: "Sistema de ventilação", correta: false, explicacao: "Não está relacionado à esterilização." },
+          { texto: "Equipamento de esterilização a vapor sob pressão", correta: true },
+          { texto: "Máquina de lavar hospitalar", correta: false, explicacao: "Serve apenas para lavar, não esteriliza." }
+        ]
+      },
+      {
+        pergunta: "Qual é a etapa após a limpeza dos instrumentos?",
+        opcoes: [
+          { texto: "Secagem e inspeção", correta: true },
+          { texto: "Descarte", correta: false, explicacao: "Só ocorre com material inservível." },
+          { texto: "Esterilização", correta: false, explicacao: "Antes da esterilização é preciso inspecionar." }
+        ]
+      },
+      {
+        pergunta: "Qual tipo de esterilização é ideal para materiais sensíveis ao calor?",
+        opcoes: [
+          { texto: "Autoclave", correta: false, explicacao: "Utiliza calor e pode danificar o material." },
+          { texto: "Óxido de etileno", correta: true },
+          { texto: "Esterilização a seco", correta: false, explicacao: "Também usa altas temperaturas." }
+        ]
+      },
+      {
+        pergunta: "Qual é a última etapa do processamento na CME?",
+        opcoes: [
+          { texto: "Armazenamento", correta: true },
+          { texto: "Empacotamento", correta: false, explicacao: "É uma etapa anterior." },
+          { texto: "Limpeza", correta: false, explicacao: "É a etapa inicial." }
+        ]
+      },
+      {
+        pergunta: "O empacotamento deve ser feito com:",
+        opcoes: [
+          { texto: "Qualquer tipo de papel", correta: false, explicacao: "O material deve ser adequado à esterilização." },
+          { texto: "Material específico e técnicas adequadas", correta: true },
+          { texto: "Plástico de uso comum", correta: false, explicacao: "Plásticos comuns não garantem esterilidade." }
+        ]
+      },
+      {
+        pergunta: "Função do enfermeiro na CME inclui:",
+        opcoes: [
+          { texto: "Supervisionar o processamento dos materiais", correta: true },
+          { texto: "Realizar cirurgias", correta: false, explicacao: "Essa é função médica." },
+          { texto: "Prescrever medicamentos", correta: false, explicacao: "Essa função ocorre na atenção básica ou hospitalar." }
+        ]
+      },
+      {
+        pergunta: "O que deve ser feito antes de enviar o material esterilizado?",
+        opcoes: [
+          { texto: "Misturar com não esterilizados", correta: false, explicacao: "Contamina o material!" },
+          { texto: "Checar integridade e validade da esterilização", correta: true },
+          { texto: "Embalar novamente", correta: false, explicacao: "A embalagem já deve estar adequada." }
+        ]
+      },
+      {
+        pergunta: "Por que monitorar o ciclo de esterilização?",
+        opcoes: [
+          { texto: "Evitar gasto de energia", correta: false, explicacao: "A segurança é mais importante que economia." },
+          { texto: "Assegurar esterilização efetiva", correta: true },
+          { texto: "Acelerar o processo", correta: false, explicacao: "Agilidade não pode comprometer a segurança." }
+        ]
+      }
+    ];
+
+    let pontuacao = 0;
+    let respondidas = 0;
+
+    function responder(botao, correta, explicacao) {
+      const botoes = botao.parentElement.querySelectorAll("button");
+      const feedback = botao.parentElement.nextElementSibling;
+
+      if (feedback.textContent !== "") return;
+
+      botoes.forEach(b => {
+        b.disabled = true;
+        const ehCorreta = b.getAttribute("onclick").includes("true");
+        if (ehCorreta) {
+          b.classList.add("correct");
+        }
+      });
+
+      if (correta) {
+        botao.classList.add("correct");
+        feedback.textContent = "✅ Resposta correta!";
+        pontuacao++;
+      } else {
+        botao.classList.add("incorrect");
+        feedback.textContent = `❌ Resposta incorreta. ${explicacao}`;
+      }
+
+      respondidas++;
+      if (respondidas === questoes.length) {
+        document.getElementById("pontuacao-final").textContent =
+          `Você acertou ${pontuacao} de ${questoes.length} questões.`;
+        document.getElementById("reiniciar").style.display = "block";
+      }
+
+      setTimeout(() => {
+        window.scrollBy({
+          top: 300,
+          behavior: 'smooth'
+        });
+      }, 300);
+    }
+
+    const container = document.getElementById("quiz-container");
+
+    questoes.forEach((q, i) => {
+      const sec = document.createElement("section");
+      sec.innerHTML = `
+        <p class="question">${i + 1}. ${q.pergunta}</p>
+        <div class="options">
+          ${q.opcoes.map(op => `
+            <button onclick="responder(this, ${op.correta}, '${op.explicacao || ''}')">${op.texto}</button>
+          `).join('')}
+        </div>
+        <p class="feedback"></p>
+      `;
+      container.appendChild(sec);
+    });
+  </script>
+</body>
+</html>
